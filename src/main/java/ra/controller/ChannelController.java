@@ -30,12 +30,14 @@ public class ChannelController {
         chanelService.save(channel);
         return ResponseEntity.ok(new ResponseMessage("Tạo kênh mới thành công "));
     }
-    @PostMapping("/update")
-    public ResponseEntity<?> updateChannel(@RequestBody Channel c) {
-        Channel update = chanelService.findById(c.getChannel_id());
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> updateChannel(@PathVariable Long id, @RequestBody Channel channel) {
+        Channel update = chanelService.findById(id);
         if (update != null) {
-            boolean savedChannel = chanelService.save(c);
-            return ResponseEntity.ok(savedChannel);
+            channel.setChannel_id(update.getChannel_id());
+            channel.setCreate_at(new Date());
+            chanelService.save(channel);
+            return ResponseEntity.ok(new ResponseMessage("Chỉnh sửa thông  tin thành công") );
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Không tim thấy kênh muốn chỉnh sửa !!!!");
     }
@@ -44,7 +46,5 @@ public class ChannelController {
         chanelService.deleteById(id);
         return ResponseEntity.ok(new ResponseMessage("xóa thành công"));
     }
-
-
 }
 

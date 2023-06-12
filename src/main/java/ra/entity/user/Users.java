@@ -46,8 +46,9 @@ public class Users {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Subscription> subscriptions = new ArrayList<>();
+
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
-    private List<Videos> listVideos;
+    private List<Videos> listVideos=new ArrayList<>();
 
     public Users(String username, String email, String password, List<Comment> comments, List<Subscription> subscriptions, Set<Roles> roles) {
         this.username = username;

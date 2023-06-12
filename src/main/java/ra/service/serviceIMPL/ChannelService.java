@@ -32,4 +32,5 @@ public class ChannelService implements IChanelService {
     public Channel findById(Long id) {
         return chanelRepository.findById(id).get();
     }
+
 }
