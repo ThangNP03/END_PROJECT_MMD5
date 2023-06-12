@@ -1,0 +1,10 @@
+package ra.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import ra.entity.Videos;
+@Repository
+public interface IVideoRepository extends JpaRepository<Videos, Long > {
+
+}
