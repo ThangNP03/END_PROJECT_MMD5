@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ra.dto.requets.ResponseMessage;
 import ra.entity.Videos;
@@ -19,11 +20,22 @@ import java.util.List;
 public class VideosController {
     @Autowired
     private IVideoService videoService;
+
     @GetMapping()
+    @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('PM')")
     public List<Videos> findAll(){
         List<Videos> list_video = videoService.findAll();
         return list_video;
     }
+
+
+    //    @GetMapping()
+//
+//    @PreAuthorize("hasAuthority('ADMIN') ", "hasAuthority('PM')")
+//    public List<Videos> findAll(){
+//        List<Videos> list_video = videoService.findAll();
+//        return list_video;
+//    }
     @PostMapping("/create")
     public ResponseEntity<?> createChannel(@RequestBody Videos videos) {
         videos.setCreate_at(new Date());
@@ -46,14 +58,69 @@ public class VideosController {
         videoService.deleteById(id);
         return ResponseEntity.ok(new ResponseMessage("xóa thành công"));
     }
-    @PutMapping("/increase-likes/{id}")
+    // tăng lượt  like Videos
+    @PutMapping("/increase_likes/{id}")
     public ResponseEntity<?> increase_likes (@PathVariable Long id, @RequestBody Videos videos) {
         Videos update = videoService.findById(id);
         if (update != null) {
+            videos.setVideo_id(update.getVideo_id());
             videos.setLike(update.getLike() + 1);
             videoService.save(videos);
             return ResponseEntity.ok(new ResponseMessage("Bạn đã thích video"  ) );
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Không tiìm thấy video !!!!");
     }
+
+    // bỏ đi lượt like của mình
+    @PutMapping("/decrease_likes/{id}")
+    public ResponseEntity<?> decrease_likes(@PathVariable Long id,@RequestBody Videos videos){
+        Videos update = videoService.findById(id);
+        if (update != null) {
+            videos.setVideo_id(update.getVideo_id());
+            videos.setLike(update.getLike() - 1);
+            videoService.save(videos);
+            return ResponseEntity.ok(new ResponseMessage("Bạn đã Không thích video"  ) );
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Không tìm thấy video !!!!");
+
+    }
+    // tăng lượt dislike
+    @PutMapping("/increase_disLikes/{id}")
+    public ResponseEntity<?> increase_disLikes (@PathVariable Long id, @RequestBody Videos videos) {
+        Videos update = videoService.findById(id);
+        if (update != null) {
+            videos.setVideo_id(update.getVideo_id());
+            videos.setLike(update.getLike() + 1);
+            videoService.save(videos);
+            return ResponseEntity.ok(new ResponseMessage("Bạn đã không  thích video"  ) );
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Không tìm thấy video !!!!");
+    }
+
+    // bỏ đi lượt like của mình
+    @PutMapping("/decrease_disLikes/{id}")
+    public ResponseEntity<?> decrease_disLikes(@PathVariable Long id,@RequestBody Videos videos){
+        Videos update = videoService.findById(id);
+        if (update != null) {
+            videos.setVideo_id(update.getVideo_id());
+            videos.setLike(update.getLike() - 1);
+            videoService.save(videos);
+            return ResponseEntity.ok(new ResponseMessage("Bạn đã bỏ không thích video"  ) );
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Không tìm thấy video !!!!");
+
+    }
+    // Tính lượt views của video
+    @PutMapping("/views/{id}")
+    public ResponseEntity<?> views (@PathVariable Long id, @RequestBody Videos videos) {
+        Videos update = videoService.findById(id);
+        if (update != null) {
+            videos.setVideo_id(update.getVideo_id());
+            videos.setViews(update.getViews() + 1);
+            videoService.save(videos);
+            return ResponseEntity.ok(new ResponseMessage("Bạn đã thích video"  ) );
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Không tiìm thấy video !!!!");
+    }
+
 }

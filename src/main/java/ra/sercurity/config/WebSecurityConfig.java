@@ -57,6 +57,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/v4/admin/**").hasAuthority("ADMIN")
                 .antMatchers("/api/v4/pm/**").hasAnyAuthority("ADMIN","PM")
                 .antMatchers("/api/v4/user/**").hasAnyAuthority("USER","ADMIN","PM")
+//                .antMatchers("/**").permitAll()
                 .anyRequest().authenticated(); // Tất cả các request khác đều cần phải xác thực mới được truy cập
 
         // Thêm một lớp Filter kiểm tra jwt

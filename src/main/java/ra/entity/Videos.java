@@ -1,4 +1,5 @@
 package ra.entity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -36,10 +37,11 @@ public class Videos {
     @Column(name = "is_status")
     private boolean status;
 
-    @Column(name = "viewss")
+    @Column(name = "views")
     private int views;
     @Column(name = "create_at")
     private Date create_at;
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id")
     private Users user;

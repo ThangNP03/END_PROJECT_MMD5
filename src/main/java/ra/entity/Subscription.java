@@ -15,7 +15,7 @@ import javax.persistence.*;
 public class Subscription {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long like_id;
+    private Long sub_id;
     @Column(name = "is_subscribed")
     private boolean isSubscribed;
 
